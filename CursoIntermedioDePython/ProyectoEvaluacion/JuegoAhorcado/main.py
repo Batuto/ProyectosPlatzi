@@ -1,5 +1,6 @@
 from os import system
 from random import choice
+from time import sleep
 from unicodedata import normalize
 
 
@@ -23,8 +24,7 @@ class HangManGame(object):
 
     def select_level(self):
         self.redraw_scr(self.LVL_S_MSG)
-        self.level = int(input('>> '))
-        print(self.level)
+        self.level = int(self.input('>> '))
 
 
     def get_word(self):
@@ -37,14 +37,37 @@ class HangManGame(object):
         self.norm_word = normalize('NFD', self.org_word)
         self.norm_word = self.norm_word.encode('ascii', 'ignore').decode('utf8')
 
+    # TODO:
+    # Add a method to split the word and the indexes, filter maybe with
+    # a dictionary conversion
 
-    def redraw_scr(self, context):
-        # system('clear')
+
+    def redraw_scr(self, context=''):
+        system('clear')
         print(context)
-    
-    
+
+
+    def input(self, msg):
+        try:
+            usr_value = input(msg)
+            return usr_value
+        except KeyboardInterrupt:
+            self.redraw_scr()
+            print("Thank you for using this game.")
+            self.stimer_print("Closing...")
+            exit()
+
+
+    def stimer_print(self, text, time=0.3):
+        # TODO: Make the delay work properly.
+       for char in text+'\n':
+           print(char, end="")
+           sleep(time)
+
+   
 def main():
     game = HangManGame()
+
 
 if __name__ == '__main__':
     main()
